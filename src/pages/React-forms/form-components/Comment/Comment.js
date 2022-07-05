@@ -1,24 +1,36 @@
-export default function Comment(props) {
-  const array = props.arrayConst;
-  const listItems = array.map((item, index) => (
+import './index.scss';
+function Comment(props) {
+  const { arrayConst, setarray } = props;
+  const text = 'список пуст';
+
+  const remove = (index) => {
+    const newAray = [...arrayConst];
+    newAray.splice(index, 1);
+    setarray(newAray);
+  };
+
+  const listItems = arrayConst.map((item, index) => (
     <div className="column__content-stylys" key={index.toString()}>
       <div className="comment">
-        <div className="comment-text">
-          <img
-            className="comment-vatar"
-            src={`http://placekitten.com/g/${90}/${90}`}
-            // alt={item.Loadfile[0].name}
-          />
-          {/* <div>{item.Loadfile[0].name ? item.Loadfile[0].name : '000'}</div> */}
-          <div>{item.date}</div>
-          <div>{item.username}</div>
-          <div>{item.fullname}</div>
-          <div>{item.select}</div>
-          <div>{item.radio}</div>
-          <div>{item.scales == true ? 'true' : 'no'}</div>
+        <div className="comment-conteiner">
+          <button
+            className="comment-btn btn"
+            onClick={() => {
+              remove(index);
+            }}
+          >
+            Удалить товар
+          </button>
+          <img className="comment-avatar" src={`http://placekitten.com/g/${90}/${90}`} />
+          <div className="comment__info">
+            <div>Идентификатор: {item.indifexitor}</div>
+            <div>Название товара: {item.username}</div>
+            <div>Цена товара: {item.fullname}</div>
+          </div>
         </div>
       </div>
     </div>
   ));
-  return <div className="column__content">{listItems}</div>;
+  return <div className="column__content">{arrayConst.length > 0 ? listItems : text}</div>;
 }
+export default Comment;
