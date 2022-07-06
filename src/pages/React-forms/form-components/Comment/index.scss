@@ -31,6 +31,17 @@
     padding: 10px 10px;
     border-radius: 10px;
     background: rgb(255, 255, 255);
+    
+}
+
+.comment__info-text {
+    
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
 }
 
 .comment-btn {
@@ -39,4 +50,11 @@
 
 .comment-avatar {
     border-radius: 10px;
+}
+
+.comment-avatar__text-h4 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 150px;
 }

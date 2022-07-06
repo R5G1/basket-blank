@@ -4,43 +4,47 @@ import Comment from './Comment/Comment';
 import './form-style.scss';
 
 function FormContainer() {
-  const arayTest = [];
-  const [arrayConst, setarrayConst] = useState([]);
+  const arrayKeep = [];
+  const [arrayConst, setarrayConst] = useState(arrayKeep);
+
+  const [inputDis, setInputDis] = useState('0');
 
   const { register, handleSubmit } = useForm();
 
-  // function Comment() {
-  //   const remove = (index) => {
-  //     const newAray = [...arrayConst];
-  //     newAray.splice(index, 1);
-  //     setarrayConst(newAray);
-  //   };
-  //   const text = 'список пуст';
-  //   const listItems = arrayConst.map((item, index) => (
-  //     <div className="column__content-stylys" key={index.toString()}>
-  //       <div className="comment">
-  //         <div className="comment-conteiner">
-  //           <button
-  //             className="comment-btn btn"
-  //             onClick={() => {
-  //               remove(index);
-  //             }}
-  //           >
-  //             Удалить товар
-  //           </button>
-  //           <img className="comment-avatar" src={`http://placekitten.com/g/${90}/${90}`} />
-  //           <div className="comment__info">
-  //             <div>Идентификатор: {item.indifexitor}</div>
-  //             <div>Название товара: {item.username}</div>
-  //             <div>Цена товара: {item.fullname}</div>
-  //           </div>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   ));
-  //   // return <div className="column__content">{array.length > 0 ? listItems : text}</div>;
-  //   return <div className="column__content">{listItems}</div>;
-  // }
+  function calcSum() {
+    let sum = 0;
+    arrayConst.forEach((item) => {
+      sum += +item.price;
+    });
+    return sum;
+  }
+
+  function calcSumDiscount() {
+    let sum = 0;
+    arrayConst.forEach((item) => {
+      sum += +item.newPrice;
+    });
+    return sum.toFixed(1);
+  }
+
+  function calcDiscount() {
+    const newAray = [...arrayConst];
+    newAray.forEach((item) => {
+      if (inputDis == 0) {
+        return (item.newPrice = '');
+      }
+      item.newPrice = (item.price - item.price * (inputDis / 100)).toFixed(2);
+    });
+    setarrayConst(newAray);
+  }
+
+  function disableDiscount() {
+    const newAray = [...arrayConst];
+    newAray.forEach((item) => {
+      item.newPrice = '';
+    });
+    setarrayConst(newAray);
+  }
 
   function onSubmit(data, e) {
     setarrayConst([...arrayConst, data]);
@@ -71,7 +75,7 @@ function FormContainer() {
                   // minLength={2}
                   className="form-main__input-text"
                   type="text"
-                  {...register('username')}
+                  {...register('name')}
                   placeholder="Название"
                 />
               </label>
@@ -82,7 +86,17 @@ function FormContainer() {
                   min="0"
                   className="form-main__input-text"
                   type="number"
-                  {...register('fullname')}
+                  {...register('price')}
+                  placeholder="Цена"
+                />
+              </label>
+              <label className="form-main__label-input-none ">
+                Цена товара:
+                <input
+                  min="0"
+                  className="form-main__input-text"
+                  type="number"
+                  {...register('newPrice')}
                   placeholder="Цена"
                 />
               </label>
@@ -94,15 +108,59 @@ function FormContainer() {
           </div>
         </form>
         <div className="statistics">
-          <p>Lorem ipsum dolor</p>
-          <div className="statistics__quantity">10</div>
-          <div className="statistics__price">10</div>
+          <div className="statistics__quantity">Количество товаров: {arrayConst.length}</div>
+          <div className="statistics__price">
+            Цена списка товаров:
+            {calcSumDiscount() > 0 ? (
+              <>
+                <span style={{ textDecoration: 'line-through', padding: '0px 10px' }}>
+                  {calcSum()}
+                </span>
+                <span style={{ textDecoration: 'none' }}>{calcSumDiscount()}</span>
+              </>
+            ) : (
+              calcSum()
+            )}
+            <span
+              style={
+                calcSumDiscount() > 0
+                  ? { textDecoration: 'line-through' }
+                  : { textDecoration: 'none' }
+              }
+            ></span>
+          </div>
         </div>
         <div className="discount">
-          <div className="discount__number"></div>
+          <div className="discount__number">
+            <input
+              className="discount__number-input"
+              type="range"
+              id="discount"
+              name="volume"
+              min="0"
+              max="99"
+              step="5"
+              onChange={(event) => setInputDis(event.target.value)}
+            />
+            <label htmlFor="discount">Скидка: {inputDis}</label>
+          </div>
           <div className="discount__conteiner">
-            <button className="discount__btn-apply btn">Установить скидку</button>
-            <button className="discount__btn-delete btn">Убрать скидки</button>
+            <button
+              className="discount__btn-apply btn"
+              onClick={() => {
+                calcDiscount();
+              }}
+            >
+              Установить скидку
+            </button>
+            <button
+              className="discount__btn-delete btn"
+              onClick={() => {
+                disableDiscount();
+              }}
+            >
+              Убрать скидки
+            </button>
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 .conteiner {
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
   flex-wrap: wrap;
   width: 90vw;
@@ -8,7 +9,7 @@
 }
 
 .form-main {
-  max-width: 40vw;
+  max-width: 60vw;
 
   display: flex;
   flex-direction: column;
@@ -27,9 +28,14 @@
     flex-wrap: wrap;
     align-items: center;
     margin: 10px 0px;
-    input{
+
+    input {
       margin: 5px 0px;
     }
+  }
+
+  &__label-input-none {
+    display: none;
   }
 
   &__input-text {
@@ -49,17 +55,32 @@
 }
 
 .statistics {
-  
-  width: 100px;
+  margin: 20px 0px;
+  width: 100%;
   padding: 0px 10px;
 }
 
 .discount {
-  min-width: 100px;
+  margin: 20px 0px;
+  width: 100%;
   padding: 0px 10px;
-  &__conteiner{
-    button{
+
+  &__number {
+    margin: 10px 0px;
+  }
+
+  &__number-input {
+    width: 150px;
+    margin-right: 20px;
+  }
+
+  &__conteiner {
+    max-width: 500px;
+    margin: 0 auto;
+
+    button {
       margin: 5px 0px;
+
     }
   }
 }
