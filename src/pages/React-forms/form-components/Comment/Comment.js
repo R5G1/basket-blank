@@ -1,6 +1,5 @@
 import './index.scss';
-function Comment(props) {
-  const { arrayConst, setarray } = props;
+function Comment({ arrayConst, setarray, btnClick }) {
   const text = 'Cписок пуст';
 
   const remove = (index) => {
@@ -33,13 +32,7 @@ function Comment(props) {
             </div>
             <div className="comment__info-text">
               <p> Цена товара: </p>
-              <p
-                style={
-                  item.newPrice > 0
-                    ? { textDecoration: 'line-through' }
-                    : { textDecoration: 'none' }
-                }
-              >
+              <p style={btnClick ? { textDecoration: 'line-through' } : { textDecoration: 'none' }}>
                 {item.price}
               </p>
               <p>{item.newPrice}</p>

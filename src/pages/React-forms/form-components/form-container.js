@@ -7,7 +7,9 @@ function FormContainer() {
   const arrayKeep = [];
   const [arrayConst, setarrayConst] = useState(arrayKeep);
 
-  const [inputDis, setInputDis] = useState('0');
+  const [inputDis, setInputDis] = useState(0);
+
+  const [btnClick, setBtnClick] = useState(false);
 
   const { register, handleSubmit } = useForm();
 
@@ -24,16 +26,19 @@ function FormContainer() {
     arrayConst.forEach((item) => {
       sum += +item.newPrice;
     });
-    return sum.toFixed(1);
+
+    return (
+      <>
+        <span style={{ textDecoration: 'line-through', padding: '0px 10px' }}>{calcSum()}</span>
+        <span style={{ textDecoration: 'none' }}>{sum.toFixed(1)}</span>
+      </>
+    );
   }
 
   function calcDiscount() {
     const newAray = [...arrayConst];
     newAray.forEach((item) => {
-      if (inputDis == 0) {
-        return (item.newPrice = '');
-      }
-      item.newPrice = (item.price - item.price * (inputDis / 100)).toFixed(2);
+      item.newPrice = (item.price - item.price * (inputDis / 100)).toFixed(1);
     });
     setarrayConst(newAray);
   }
@@ -44,6 +49,7 @@ function FormContainer() {
       item.newPrice = '';
     });
     setarrayConst(newAray);
+    setBtnClick(false);
   }
 
   function onSubmit(data, e) {
@@ -111,23 +117,7 @@ function FormContainer() {
           <div className="statistics__quantity">Количество товаров: {arrayConst.length}</div>
           <div className="statistics__price">
             Цена списка товаров:
-            {calcSumDiscount() > 0 ? (
-              <>
-                <span style={{ textDecoration: 'line-through', padding: '0px 10px' }}>
-                  {calcSum()}
-                </span>
-                <span style={{ textDecoration: 'none' }}>{calcSumDiscount()}</span>
-              </>
-            ) : (
-              calcSum()
-            )}
-            <span
-              style={
-                calcSumDiscount() > 0
-                  ? { textDecoration: 'line-through' }
-                  : { textDecoration: 'none' }
-              }
-            ></span>
+            {btnClick ? calcSumDiscount() : calcSum()}
           </div>
         </div>
         <div className="discount">
@@ -138,7 +128,7 @@ function FormContainer() {
               id="discount"
               name="volume"
               min="0"
-              max="99"
+              max="100"
               step="5"
               onChange={(event) => setInputDis(event.target.value)}
             />
@@ -148,7 +138,7 @@ function FormContainer() {
             <button
               className="discount__btn-apply btn"
               onClick={() => {
-                calcDiscount();
+                setBtnClick(true), calcDiscount();
               }}
             >
               Установить скидку
@@ -166,7 +156,7 @@ function FormContainer() {
       </div>
       <div className="form-card">
         <div>
-          <Comment arrayConst={arrayConst} setarray={setarrayConst} />
+          <Comment arrayConst={arrayConst} setarray={setarrayConst} btnClick={btnClick} />
         </div>
       </div>
     </div>
